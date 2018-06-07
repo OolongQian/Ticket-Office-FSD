@@ -14,7 +14,7 @@ namespace sjtu {
      * 这个情况下所有的信息都可以被key所包含，现在还不想修改，所以key和value重复。*/
     class bill_key {
     public:
-        int user_id;
+        char username[NAME_SIZE]; 
         short date;
         char train_cat;
         char train_id[ID_SIZE];
@@ -24,8 +24,8 @@ namespace sjtu {
         // set it to null is necessary because of memset.
         bill_key() {}
 
-        bill_key(int u_id, const short &d, const char cat, const char *t_id = nullptr, const char &loc1 = -1, const char &loc2 = -1) {
-            user_id = u_id;
+        bill_key(const char *u_id, const short &d, const char cat, const char *t_id = nullptr, const char &loc1 = -1, const char &loc2 = -1) {
+            strcpy(username, u_id);
             // strcpy(user_id, u_id);
             date = d;
             train_cat = cat;
@@ -44,12 +44,12 @@ namespace sjtu {
         }
         /// test code.
         void view() {
-            printf("%d\n%d\n%c\n%s\n%d %d\n", user_id, date, train_cat, train_id, station_idx1, station_idx2);
+            printf("%s\n%d\n%c\n%s\n%d %d\n", username, date, train_cat, train_id, station_idx1, station_idx2);
         }
 
         bool operator< (const bill_key &other) const {
             int cmp;
-            cmp = user_id - other.user_id;
+            cmp = strcmp(username, other.username);
             if(cmp < 0)
                 return true;
             else if(cmp > 0)
@@ -89,7 +89,7 @@ namespace sjtu {
 
         bool operator<= (const bill_key &other) const {
             int cmp;
-            cmp = user_id - other.user_id;
+            cmp = strcmp(username, other.username);
             if(cmp < 0)
                 return true;
             else if(cmp > 0)
@@ -128,7 +128,7 @@ namespace sjtu {
         }
 
         bool operator== (const bill_key &other) const {
-            return user_id - other.user_id == 0 &&
+            return strcmp(username, other.username) == 0 &&
                    date == other.date &&
                    train_cat == other.train_cat &&
                    strcmp(train_id, other.train_id) == 0 &&
@@ -140,13 +140,13 @@ namespace sjtu {
             return !(*this == other);
         }
     };
-    bill_key get_low_bill_key(int u_id, const short &d, const char &cat) {
-        bill_key ret(u_id, d, cat);
+    bill_key get_low_bill_key(const char *username, const short &d, const char &cat) {
+        bill_key ret(username, d, cat);
         ret.train_id[0] = '\0';
         return ret;
     }
-    bill_key get_high_bill_key(int u_id, const short &d, const char &cat) {
-        bill_key ret(u_id, d, cat);
+    bill_key get_high_bill_key(const char *username, const short &d, const char &cat) {
+        bill_key ret(username, d, cat);
         ret.train_id[0] = 127;
         ret.train_id[1] = '\0';
         return ret;

@@ -11,7 +11,37 @@
  * I current let privilege 0 mean loser, and non-zero mean admin. */
 namespace sjtu {
 
-    typedef int user_key;
+    class user_key {
+    public:
+        char username[ID_SIZE];
+
+        user_key() {}
+        user_key(const char *other) {
+            strcpy(username, other);
+        }
+        /// overload huge amount of functions.
+        bool operator<(const user_key &other) {
+            return strcmp(username, other.username) < 0;
+        }
+        bool operator<=(const user_key &other) {
+            return strcmp(username, other.username) <= 0;
+        }
+        bool operator!=(const user_key &other) {
+            return strcmp(username, other.username) != 0;
+        }
+        bool operator==(const user_key &other) {
+            return strcmp(username, other.username) == 0;
+        }
+
+        user_key &operator=(const user_key &other) {
+            strcpy(username, other.username);
+            return *this;
+        }
+
+        void read() {
+            reader(username);
+        }
+    };
 
     class user_val {
     public:

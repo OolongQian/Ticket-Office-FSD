@@ -16,7 +16,5 @@ add_executable(newdatabase main.cpp
         constant.h
         train_id_kv.h
         station_kv.h
-        const_recorder.h
         processor.h
-
         ticket_kv.h bill_kv.h)

@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/qiansucheng/Desktop/gittest/data-structure/newdatabase/main.cpp" "/Users/qiansucheng/Desktop/gittest/data-structure/newdatabase/cmake-build-debug/CMakeFiles/newdatabase.dir/main.cpp.o"
+  "/Users/qiansucheng/Desktop/Ticket-Office-FSD/backEnd/main.cpp" "/Users/qiansucheng/Desktop/Ticket-Office-FSD/backEnd/cmake-build-debug/CMakeFiles/newdatabase.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
 

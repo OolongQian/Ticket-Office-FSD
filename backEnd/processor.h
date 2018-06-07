@@ -12,7 +12,6 @@
 #include "train_info_kv.h"
 #include "train_id_kv.h"
 #include "station_kv.h"
-#include "const_recorder.h"
 #include "ticket_kv.h"
 #include "bill_kv.h"
 
@@ -36,7 +35,6 @@ namespace sjtu {
         BPlusTree<ticket_key, ticket_val> *ticket_db;
         BPlusTree<bill_key, bill_val> *bill_db;
 
-        const_recorder CR;
         bool clean;
         /** processor utility is a bunch of necessary variable that records things like id. */
     public:
@@ -57,8 +55,6 @@ namespace sjtu {
 
             bill_db = new BPlusTree<bill_key, bill_val>();
             bill_db->set_filename("zbill_db.txt");
-
-            CR.set_filename("zconst.txt");
 
             init_open_file();
             clean = false;
@@ -87,7 +83,10 @@ namespace sjtu {
                 /**
                  * User command: */
                 if (cmd == REGISTER) {
-                    printf("%d\n", task_register());
+                    if(task_register())
+                        printf("1\n");
+                    else
+                        printf("0\n");
                 }
                 else if (cmd == QUERY_PROFILE) {
                     if(!task_query_profile())
@@ -198,7 +197,7 @@ namespace sjtu {
             }
         }
 
-        int task_register();
+        bool task_register();
         bool task_query_profile();
         bool task_login();
         bool task_modify_profile();
@@ -248,7 +247,6 @@ namespace sjtu {
             station_db->open_file();
             ticket_db->open_file();
             bill_db->open_file();
-            CR.open_file();
         }
         void close_file() {
             user_db->close_file();
@@ -257,7 +255,6 @@ namespace sjtu {
             station_db->close_file();
             ticket_db->close_file();
             bill_db->close_file();
-            CR.close_file();
         }
 
     private:
@@ -272,7 +269,7 @@ namespace sjtu {
 
         /**
          * 你只要把那个数组容器给我，把当前长度给我，我把我要到的东西都append在后面，然后更新数组长度变量。*/
-        void query_bill_per_catalog(const int &user_id, const short &num_date, const char &train_cat, bill_val *bills_val, int &len, bill_key *bills_key);
+        void query_bill_per_catalog(const user_key &user_id, const short &num_date, const char &train_cat, bill_val *bills_val, int &len, bill_key *bills_key);
         /**
          * sub-function used by task_query_bill, which structures bill information and print it out. */
         void print_bill(const bill_key &b_key, const bill_val &b_val);

@@ -5,33 +5,33 @@ bool ticket_idx_table[100];
 
 /**
  * public function: */
-int sjtu::processor::task_register() {
+bool sjtu::processor::task_register() {
     user_key key;
     user_val val;
+    key.read();
 
-    // find user_id and privilege first.
-    key = CR.append_id;
-    CR.increment();
+    // check whether username exists.
+    val = user_db->find(key);
+    if(!val.null_obj())
+        return false;
 
-    if(key == 2018) {
+
+    val.read();
+    if(user_db->size() == 0) {
         val.privilege = 2;
     }
     else {
         val.privilege = 1;
     }
-
-    // read in user information.
-    val.read();
-
     // 插入名册元素。
     user_db->insert(key, val);
-    return key;
+    return true;
 }
 bool sjtu::processor::task_query_profile()  {
     user_key key;
     user_val val;
 
-    scanf("%d", &key);
+    key.read();
     val = user_db->find(key);
 
     // check whether found.
@@ -39,7 +39,7 @@ bool sjtu::processor::task_query_profile()  {
         return false;
     }
     else {
-        printf("%s %s %s %hd\n", val.name, val.email, val.phone, val.privilege);
+        printf("%s %s %s %s %hd\n", key.username, val.name, val.email, val.phone, val.privilege);
         return true;
     }
 }
@@ -48,7 +48,7 @@ bool sjtu::processor::task_login()  {
     char pswd[PASSWORD_SIZE];
     user_val user_found;
 
-    scanf("%d %s", &id, pswd);
+    scanf("%s %s", id.username, pswd);
     user_found = user_db->find(id);
     // printf("%s\n", user_found.password);
     // user not found or password not match.
@@ -61,7 +61,7 @@ bool sjtu::processor::task_modify_profile()  {
     user_key id;
     user_val ret;
 
-    scanf("%d", &id);
+    scanf("%s", id.username);
     ret = user_db->find(id);
     // even if this query is invalid, we have to read a user obj to clear stdin stream.
     if (ret.null_obj()) {
@@ -75,14 +75,14 @@ bool sjtu::processor::task_modify_profile()  {
     }
 }
 bool sjtu::processor::task_modify_privilege()  {
-    int id1, id2;
+    user_key user_key1, user_key2;
     short privilege;
     user_val user1, user2;
 
-    scanf("%d %d %hd", &id1, &id2, &privilege);
-    user1 = user_db->find(id1);
-    user2 = user_db->find(id2);
-    if(id1 == id2)
+    scanf("%s %s %hd", user_key1.username, user_key2.username, &privilege);
+    user1 = user_db->find(user_key1);
+    user2 = user_db->find(user_key2);
+    if(user_key1 == user_key2)
         return false;
     // if users exist.
     if (user1.null_obj() || user2.null_obj())
@@ -96,7 +96,7 @@ bool sjtu::processor::task_modify_privilege()  {
         return false;
     // do things.
     user2.privilege = privilege;
-    user_db->modify(id2, user2);
+    user_db->modify(user_key2, user2);
     return true;
 }
 
@@ -194,7 +194,7 @@ bool sjtu::processor::task_modify_train()  {
 
 bool sjtu::processor::task_buy_ticket()  {
     // input data cache.
-    int user_id;
+    user_key user_id;
     short num;
     char train_id[ID_SIZE];
     char station1[LOCATION_SIZE];
@@ -208,7 +208,7 @@ bool sjtu::processor::task_buy_ticket()  {
     char station_idx1, station_idx2, seat_idx;
 
     // read in data from stdin.
-    scanf("%d %hd %s %s %s %s %s", &user_id, &num, train_id, station1, station2, date_str, seat_kind);
+    scanf("%s %hd %s %s %s %s %s", user_id.username, &num, train_id, station1, station2, date_str, seat_kind);
 
     // if train doesn't exit or not on sale.
     if(!get_train_info(train_id, train_info)) {
@@ -290,7 +290,7 @@ bool sjtu::processor::task_buy_ticket()  {
             modify_date(date_str, train_info.stations[station_idx1].start_date_offset);
             date_num = (short) date_to_int(date_str);
 
-            bill_key trans_key(user_id, date_num, train_info.train_catalog, train_id, station_idx1, station_idx2);
+            bill_key trans_key(user_id.username, date_num, train_info.train_catalog, train_id, station_idx1, station_idx2);
             bill_val trans_val;
             trans_val = bill_db->find(trans_key);
             // create a trans_val.
@@ -328,7 +328,7 @@ bool sjtu::processor::task_clean() {
 }
 
 bool sjtu::processor::task_query_bill() {
-    int user_id;
+    user_key user_id;
     char date[DATE_SIZE];
     char train_cat[CATALOG_SIZE];
     size_t cat_num;
@@ -338,7 +338,7 @@ bool sjtu::processor::task_query_bill() {
     int bill_len = 0;
     short num_date;
 
-    scanf("%d %s %s", &user_id, date, train_cat);
+    scanf("%s %s %s", user_id.username, date, train_cat);
     cat_num = strlen(train_cat);
     num_date = (short) date_to_int(date);
 
@@ -472,7 +472,7 @@ void sjtu::processor::query_ticket_per_catalog(const char *station1, const char 
 
 
 bool sjtu::processor::task_refund_ticket()  {
-    int user_id;
+    char user_id[NAME_SIZE];
     int refund_num;
     char train_id[ID_SIZE];
     char station1[NAME_SIZE];
@@ -485,7 +485,7 @@ bool sjtu::processor::task_refund_ticket()  {
     char seat_cat_idx;
     train_info_val train_info;
 
-    scanf("%d %d %s %s %s %s %s", &user_id, &refund_num, train_id, station1, station2, date, seat_kind);
+    scanf("%s %d %s %s %s %s %s", user_id, &refund_num, train_id, station1, station2, date, seat_kind);
     // date hasn't been changed in bill.
     num_date = (short) date_to_int(date);
 
@@ -796,12 +796,12 @@ bool sjtu::processor::check_sufficient(const char &station_idx1, const char &sta
         return true;
 }
 
-void sjtu::processor::query_bill_per_catalog(const int &user_id, const short &num_date, const char &train_cat,
+void sjtu::processor::query_bill_per_catalog(const user_key &user_id, const short &num_date, const char &train_cat,
                                               sjtu::bill_val *bills_val, int &len, sjtu::bill_key *bills_key) {
     int add_len;
 
-    bill_key low_key = get_low_bill_key(user_id, num_date, train_cat);
-    bill_key high_key = get_high_bill_key(user_id, num_date, train_cat);
+    bill_key low_key = get_low_bill_key(user_id.username, num_date, train_cat);
+    bill_key high_key = get_high_bill_key(user_id.username, num_date, train_cat);
     bill_db->get_range(low_key, high_key, bills_val + len, add_len, bills_key + len, true);
     len += add_len;
 }
