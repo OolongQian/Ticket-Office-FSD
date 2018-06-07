@@ -13,21 +13,6 @@ app.pl = PipeLine(database_exec_path)
 def home(): 
     return render_template('index.html')
 
-@app.route('/signup', methods=['GET', 'POST'])
-def signup(): 
-    # request for signin page and fill the form
-    if request.method == 'GET': 
-        return render_template('signup.html')
-    else: 
-        # request for POST form information 
-        name = request.form['name']
-        password = request.form['password']
-        email = request.form['email']
-        phone = request.form['phone']
-        cmd = 'register' + ' ' + name + ' ' + password + ' ' + email + ' ' + phone
-        print(cmd) 
-        app.pl.write(cmd) 
-        return render_template('index.html')
 
 
 @app.route('/signin', methods=['GET', 'POST'])
