@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block css_files %}
+<link href="{{ url_for('static', filename='profile.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block navbar_left %}
+<ul class="nav navbar-nav">
+  <li><a href="{{ url_for('home') }}">Home</a></li>
+  <li><a href="https://github.com/Evensgn/DS2018-frontend-demo">Source</a></li>
+  <li><a href="#">Nothing</a></li>
+  <li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tickets<span class="caret"></span></a>
+    <ul class="dropdown-menu">
+      <li><a href="#">Search for trains</a></li>
+      <li><a href="#">Book tickets</a></li>
+      <li><a href="#">Become VIP</a></li>
+      <li role="separator" class="divider"></li>
+      <li class="dropdown-header">This part</li>
+      <li><a href="#">is just a</a></li>
+      <li><a href="#">blank sample</a></li>
+    </ul>
+  </li>
+</ul>
+{% endblock %}
+
+{% block navbar_right %}
+{% if not user_name %}
+<ul class="nav navbar-nav navbar-right">
+  <li><a href="{{ url_for('signin') }}">Log in</a></li>
+  <li><a href="{{ url_for('signup') }}">Sign up</a></li>
+</ul>
+{% else %}
+<ul class="nav navbar-nav navbar-right">
+  <li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user_name }}<span class="caret"></span></a>
+    <ul class="dropdown-menu">
+      <li><a href="{{ url_for('profile') }}">Your Profile</a></li>
+      <li role="separator" class="divider"></li>
+      <li><a href="{{ url_for('settings') }}">Settings</a></li>
+      <li><a href="{{ url_for('signout') }}">Sign Out</a></li>
+    </ul>
+  </li>
+</ul>
+{% endif %}
+{% endblock %}
+
+{% block body %}
+<div class="jumbotron profile-container">
+  <h3>{{ user_name }}</h3>
+  <h4>{{ user_id }}</h4>
+  <br/>
+  <div style="font-size: 15px">
+    <p><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> {{ user_email }}</p>
+    <p><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> {{ user_phone }}</p>
+    <p><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{ user_priv }}</p>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block css_files %}
+{% endblock %}
+
+{% block navbar_left %}
+<ul class="nav navbar-nav">
+  <li class="active"><a href="#">Home</a></li>
+  <li><a href="https://github.com/Evensgn/DS2018-frontend-demo">Source</a></li>
+  <li><a href="#">Nothing</a></li>
+  <li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tickets<span class="caret"></span></a>
+    <ul class="dropdown-menu">
+      <li><a href="#">Search for trains</a></li>
+      <li><a href="#">Book tickets</a></li>
+      <li><a href="#">Become VIP</a></li>
+      <li role="separator" class="divider"></li>
+      <li class="dropdown-header">This part</li>
+      <li><a href="#">is just a</a></li>
+      <li><a href="#">blank sample</a></li>
+    </ul>
+  </li>
+</ul>
+{% endblock %}
+
+{% block navbar_right %}
+{% if not user_name %}
+<ul class="nav navbar-nav navbar-right">
+  <li><a href="{{ url_for('signin') }}">Log in</a></li>
+  <li><a href="{{ url_for('signup') }}">Sign up</a></li>
+</ul>
+{% else %}
+<ul class="nav navbar-nav navbar-right">
+  <li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user_name }}<span class="caret"></span></a>
+    <ul class="dropdown-menu">
+      <li><a href="{{ url_for('profile') }}">Your Profile</a></li>
+      <li role="separator" class="divider"></li>
+      <li><a href="{{ url_for('settings') }}">Settings</a></li>
+      <li><a href="{{ url_for('signout') }}">Sign Out</a></li>
+    </ul>
+  </li>
+</ul>
+{% endif %}
+{% endblock %}
+
+{% block body %}
+<div class="jumbotron">
+  {% if success_info %}
+  <div class="alert alert-success alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    {{ success_info }}
+  </div>
+  {% endif %}
+  {% if err_info %}
+  <div class="alert alert-danger alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    {{ err_info }}
+  </div>
+  {% endif %}
+  <h1>Demo frontend</h1>
+  <p>This website works as a simple demo frontend of course project of Data Structure 2018, ACM Class, Shanghai Jiao Tong University. Only a fraction of the functionalities is implemented.</p>
+  <p>To see the source code and the document, check the link below.</p>
+  <p>
+    <a class="btn btn-lg btn-primary" href="https://github.com/Evensgn/DS2018-frontend-demo" role="button">View source code &raquo;</a>
+  </p>
+</div>
+{% endblock %}
