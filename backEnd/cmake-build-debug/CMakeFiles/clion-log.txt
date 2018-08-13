@@ -1,4 +1,0 @@
-/Applications/CLion.app/Contents/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/qiansucheng/Desktop/ACM班/2018春/数据结构/火车订票系统大作业/Ticket-Office-FSD/backEnd
--- Configuring done
--- Generating done
--- Build files have been written to: /Users/qiansucheng/Desktop/ACM班/2018春/数据结构/火车订票系统大作业/Ticket-Office-FSD/backEnd/cmake-build-debug
