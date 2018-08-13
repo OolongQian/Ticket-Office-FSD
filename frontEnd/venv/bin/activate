@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/qiansucheng/Desktop/frontEnd/venv"
+VIRTUAL_ENV="/home/wymt/c++/bigtask/12306/html/QSC/venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

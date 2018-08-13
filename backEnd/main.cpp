@@ -1,8 +1,9 @@
 #include <iostream>
-#include "utility.h"
-#include "processor.h"
-
+#include "header/utility.h"
+#include "header/processor.h"
+#include <cstdio>
 int main() {
+    FILE *fp;
     sjtu::processor prcs;
     prcs.master();
     return 0;

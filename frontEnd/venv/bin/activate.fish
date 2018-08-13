@@ -29,7 +29,7 @@ end
 # unset irrelevant variables
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/qiansucheng/Desktop/frontEnd/venv"
+set -gx VIRTUAL_ENV "/home/wymt/c++/bigtask/12306/html/QSC/venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
